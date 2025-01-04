@@ -1,37 +1,52 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import ImageUpload from '../components/ImageUpload';
 import CameraCapture from '../components/CameraCapture';
 import ImageUrlInput from '../components/ImageUrlInput';
+import Loader from '../components/Loader';
 
 function UploadPage() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleAnalysis = async (data) => {
     try {
       navigate('/report', { state: { data } });
     } catch (error) {
+      setError('Failed to process the analysis. Please try again.');
       console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const analyzeImage = async (imageFile) => {
+    setIsLoading(true);
+    setError(null);
     try {
       const formData = new FormData();
       formData.append('file', imageFile);
       const response = await axios.post('http://localhost:8000/analyze', formData);
       handleAnalysis(response.data);
     } catch (error) {
+      setError('Failed to analyze image. Please try again.');
       console.error('Error analyzing image:', error);
+      setIsLoading(false);
     }
   };
 
   const analyzeImageUrl = async (url) => {
+    setIsLoading(true);
+    setError(null);
     try {
       const response = await axios.post('http://localhost:8000/analyze-url', { url });
       handleAnalysis(response.data);
     } catch (error) {
+      setError('Failed to analyze image URL. Please try again.');
       console.error('Error analyzing image URL:', error);
+      setIsLoading(false);
     }
   };
 
@@ -67,7 +82,24 @@ function UploadPage() {
             </div>
           </div>
         </div>
+
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-red-700">{error}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {isLoading && <Loader />}
     </div>
   );
 }

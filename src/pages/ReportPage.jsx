@@ -1,13 +1,27 @@
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import IngredientsReport from '../components/IngredientsReport';
+import Loader from '../components/Loader';
 
 function ReportPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const ingredients = location.state?.data;
 
+  useEffect(() => {
+    if (!ingredients) {
+      navigate('/');
+      return;
+    }
+    // Simulate a short loading time for smooth transition
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [ingredients, navigate]);
+
   if (!ingredients) {
-    navigate('/');
     return null;
   }
 
@@ -41,12 +55,14 @@ function ReportPage() {
         
         <div className="bg-white rounded-2xl shadow-lg p-6 transition-all duration-300 ease-in-out">
           <IngredientsReport 
-            loading={false}
+            loading={isLoading}
             ingredients={ingredients}
             error={null}
           />
         </div>
       </div>
+
+      {isLoading && <Loader />}
     </div>
   );
 }
