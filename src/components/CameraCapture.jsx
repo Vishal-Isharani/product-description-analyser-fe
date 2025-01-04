@@ -21,9 +21,9 @@ function CameraCapture({ onCapture }) {
   }, [webcamRef, onCapture]);
 
   return (
-    <div className="flex flex-col h-full">
+    <>
       <button
-        className="btn-primary flex items-center justify-center gap-2"
+        className="btn-primary flex items-center justify-center gap-2 px-8"
         onClick={() => setIsOpen(true)}
       >
         <svg
@@ -45,11 +45,11 @@ function CameraCapture({ onCapture }) {
             d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
           />
         </svg>
-        Take Photo
+        Take Photo with Camera
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl p-6 max-w-2xl w-full">
             <div className="relative">
               <Webcam
@@ -75,7 +75,7 @@ function CameraCapture({ onCapture }) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
