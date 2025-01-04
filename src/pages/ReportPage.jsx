@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import IngredientsReport from '../components/IngredientsReport';
+import Chat from '../components/Chat';
 import Loader from '../components/Loader';
 
 function ReportPage() {
@@ -60,6 +61,8 @@ function ReportPage() {
             error={null}
           />
         </div>
+
+        <Chat ingredients={ingredients} />
       </div>
 
       {isLoading && <Loader />}
