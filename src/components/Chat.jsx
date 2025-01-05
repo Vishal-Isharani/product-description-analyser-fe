@@ -74,7 +74,9 @@ function Chat({ ingredients }) {
         isOpen ? 'flex' : 'hidden'
       } flex-col bg-white rounded-xl shadow-lg overflow-hidden absolute bottom-0 right-0 w-96 h-[600px]`}>
         <div className="bg-primary-500 p-4 flex justify-between items-center">
-          <h2 className="text-white text-lg font-semibold">Chat about the Product</h2>
+          <div>
+            <h2 className="text-white text-lg font-semibold">Chat about {ingredients.ProductName}</h2>
+          </div>
           <button
             onClick={() => setIsOpen(false)}
             className="text-white hover:text-gray-200"
@@ -153,6 +155,7 @@ function Chat({ ingredients }) {
 
 Chat.propTypes = {
   ingredients: PropTypes.shape({
+    ProductName: PropTypes.string.isRequired,
     Ingredients: PropTypes.arrayOf(PropTypes.string),
     HealthImplications: PropTypes.arrayOf(PropTypes.string),
     Considerations: PropTypes.arrayOf(PropTypes.string),

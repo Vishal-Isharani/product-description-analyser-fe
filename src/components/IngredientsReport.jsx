@@ -58,9 +58,12 @@ function IngredientsReport({ loading, ingredients, error }) {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
-        Product Analysis Report
-      </h2>
+      <div>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          {ingredients.ProductName}
+        </h2>
+        <div className="h-1 bg-primary-500 rounded"></div>
+      </div>
 
       {ingredients.Ingredients?.length > 0 && (
         <Section
@@ -123,6 +126,7 @@ function IngredientsReport({ loading, ingredients, error }) {
 IngredientsReport.propTypes = {
   loading: PropTypes.bool,
   ingredients: PropTypes.shape({
+    ProductName: PropTypes.string.isRequired,
     Ingredients: PropTypes.arrayOf(PropTypes.string),
     HealthImplications: PropTypes.arrayOf(PropTypes.string),
     Considerations: PropTypes.arrayOf(PropTypes.string),
