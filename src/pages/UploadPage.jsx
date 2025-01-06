@@ -11,6 +11,8 @@ function UploadPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+  console.log(apiUrl);
   const handleAnalysis = async (data) => {
     try {
       navigate('/report', { state: { data } });
@@ -28,7 +30,7 @@ function UploadPage() {
     try {
       const formData = new FormData();
       formData.append('file', imageFile);
-      const response = await axios.post('http://localhost:8000/analyze', formData);
+      const response = await axios.post(`${apiUrl}/analyze`, formData);
       handleAnalysis(response.data);
     } catch (error) {
       setError('Failed to analyze image. Please try again.');
@@ -41,7 +43,7 @@ function UploadPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.post('http://localhost:8000/analyze-url', { url });
+      const response = await axios.post(`${apiUrl}/analyze-url`, { url });
       handleAnalysis(response.data);
     } catch (error) {
       setError('Failed to analyze image URL. Please try again.');

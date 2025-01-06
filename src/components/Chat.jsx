@@ -9,6 +9,8 @@ function Chat({ ingredients }) {
   const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef(null);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -29,7 +31,7 @@ function Chat({ ingredients }) {
     
     setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/chat', {
+      const response = await axios.post(`${apiUrl}/chat`, {
         message: userMessage,
         ingredients: ingredients
       });
