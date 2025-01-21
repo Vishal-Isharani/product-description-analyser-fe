@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import ImageUpload from '../components/ImageUpload';
 import CameraCapture from '../components/CameraCapture';
 import ImageUrlInput from '../components/ImageUrlInput';
@@ -12,10 +13,10 @@ function UploadPage() {
   const [error, setError] = useState(null);
 
   const apiUrl = import.meta.env.VITE_API_URL;
-  console.log(apiUrl);
+
   const handleAnalysis = async (data) => {
     try {
-      navigate('/report', { state: { data } });
+      navigate('/report', { state: { data, request_id: uuidv4() } });
     } catch (error) {
       setError('Failed to process the analysis. Please try again.');
       console.error('Error:', error);
@@ -28,10 +29,12 @@ function UploadPage() {
     setIsLoading(true);
     setError(null);
     try {
+      const request_id = uuidv4();
       const formData = new FormData();
       formData.append('file', imageFile);
+      formData.append('request_id', request_id);
       const response = await axios.post(`${apiUrl}/analyze`, formData);
-      handleAnalysis(response.data);
+      handleAnalysis({ ...response.data, request_id });
     } catch (error) {
       setError('Failed to analyze image. Please try again.');
       console.error('Error analyzing image:', error);
@@ -43,8 +46,12 @@ function UploadPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.post(`${apiUrl}/analyze-url`, { url });
-      handleAnalysis(response.data);
+      const request_id = uuidv4();
+      const response = await axios.post(`${apiUrl}/analyze-url`, { 
+        url,
+        request_id 
+      });
+      handleAnalysis({ ...response.data, request_id });
     } catch (error) {
       setError('Failed to analyze image URL. Please try again.');
       console.error('Error analyzing image URL:', error);

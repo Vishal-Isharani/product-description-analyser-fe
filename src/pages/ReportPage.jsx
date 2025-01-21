@@ -11,7 +11,7 @@ function ReportPage() {
   const ingredients = location.state?.data;
 
   useEffect(() => {
-    if (!ingredients) {
+    if (!ingredients || !ingredients.request_id) {
       navigate('/');
       return;
     }
@@ -26,6 +26,11 @@ function ReportPage() {
     return null;
   }
 
+  const handleBackClick = () => {
+    // Reset request_id by not passing it in state
+    navigate('/', { replace: true });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="container mx-auto px-4 py-8">
@@ -34,7 +39,7 @@ function ReportPage() {
             Analysis Report
           </h1>
           <button
-            onClick={() => navigate('/')}
+            onClick={handleBackClick}
             className="btn-primary flex items-center gap-2"
           >
             <svg
@@ -62,7 +67,7 @@ function ReportPage() {
           />
         </div>
 
-        <Chat ingredients={ingredients} />
+        <Chat ingredients={ingredients} request_id={ingredients.request_id} />
       </div>
 
       {isLoading && <Loader />}

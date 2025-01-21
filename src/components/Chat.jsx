@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-function Chat({ ingredients }) {
+function Chat({ ingredients, request_id }) {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,10 +33,10 @@ function Chat({ ingredients }) {
     try {
       const response = await axios.post(`${apiUrl}/chat`, {
         message: userMessage,
-        ingredients: ingredients
+        request_id: request_id
       });
-      
-      setMessages(prev => [...prev, { type: 'bot', content: response.data.response }]);
+
+      setMessages(prev => [...prev, { type: 'bot', content: response.data }]);
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages(prev => [...prev, { 
@@ -164,6 +164,7 @@ Chat.propTypes = {
     NutritionInformation: PropTypes.arrayOf(PropTypes.string),
     Conclusion: PropTypes.string,
   }).isRequired,
+  request_id: PropTypes.string.isRequired,
 };
 
 export default Chat; 
