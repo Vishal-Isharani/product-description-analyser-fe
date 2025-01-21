@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 
 function Chat({ ingredients, request_id }) {
   const [messages, setMessages] = useState([]);
@@ -45,6 +46,18 @@ function Chat({ ingredients, request_id }) {
       }]);
     }
     setIsLoading(false);
+  };
+
+  const renderMessage = (message) => {
+    if (message.type === 'user') {
+      return <p className="text-sm">{message.content}</p>;
+    }
+
+    return (
+      <div className="prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-li:my-0 text-sm">
+        <ReactMarkdown>{message.content}</ReactMarkdown>
+      </div>
+    );
   };
 
   return (
@@ -114,7 +127,7 @@ function Chat({ ingredients, request_id }) {
                     : 'bg-gray-100 text-gray-800 rounded-bl-none'
                 }`}
               >
-                <p className="text-sm">{message.content}</p>
+                {renderMessage(message)}
               </div>
             </div>
           ))}
