@@ -33,7 +33,7 @@ function UploadPage() {
       const formData = new FormData();
       formData.append('file', imageFile);
       formData.append('request_id', request_id);
-      const response = await axios.post(`${apiUrl}/analyze`, formData);
+      const response = await axios.post(`${apiUrl}/analyze?request_id=${request_id}`, formData);
       handleAnalysis({ ...response.data, request_id });
     } catch (error) {
       setError('Failed to analyze image. Please try again.');
@@ -47,9 +47,9 @@ function UploadPage() {
     setError(null);
     try {
       const request_id = uuidv4();
-      const response = await axios.post(`${apiUrl}/analyze-url`, { 
+      const response = await axios.post(`${apiUrl}/analyze-url?request_id=${request_id}`, {
         url,
-        request_id 
+        request_id
       });
       handleAnalysis({ ...response.data, request_id });
     } catch (error) {
@@ -65,7 +65,7 @@ function UploadPage() {
         <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-8">
           Product Ingredients Analyzer
         </h1>
-        
+
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <div className="space-y-6">
             <ImageUpload onImageSelect={analyzeImage} />
@@ -113,4 +113,4 @@ function UploadPage() {
   );
 }
 
-export default UploadPage; 
+export default UploadPage;
